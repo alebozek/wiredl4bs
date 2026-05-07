@@ -1,0 +1,6 @@
+#####THE FOLLOWING IS REQUIRED FOR PROTECTED FOLDERS
+AuthUserFile ./users
+AuthName password_required
+AuthType Basic
+Require valid-user
+########END REQUIRE
