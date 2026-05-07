@@ -1,0 +1,13 @@
+services:
+  wiredl4bs:
+    build: .
+    ports:
+      - "8080:80"
+      - "2222:22"
+    volumes:
+      - aide_db:/var/lib/aide
+    restart: no
+
+volumes:
+  aide_db:
+    name: aide_db

