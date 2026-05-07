@@ -6,7 +6,6 @@ services:
       - "2222:22"
     volumes:
       - aide_db:/var/lib/aide
-    restart: no
 
 volumes:
   aide_db:
