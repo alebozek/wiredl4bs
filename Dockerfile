@@ -50,6 +50,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libpcre3 libssl3 \
         libapr1 libaprutil1 \
         libexpat1 \
+        sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # copiamos el binario de Apache compilado desde la stage anterior
@@ -98,10 +99,12 @@ RUN \
     && echo "${HTPASSWD_USER}:${HTPASSWD_PASSWORD}" | chpasswd \
     \
     # VECTOR DE ESCALADA
-    # el script de backup es propiedad de root y tiene el bit SUID activado.
-    # Python3 no va a descartar privilegios por SUID de forma nativa, pero el script
-    # llama a os.system() con una variable de entorno controlable (BACKUP_TOOL),
-    # lo que permite inyectar un binario malicioso con permisos de root.
+    # el usuario puede ejecutar el script de backup como root sin contraseña.
+    # parece una regla legítima de mantenimiento; la vulnerabilidad está en que
+    # el script llama a os.system() con BACKUP_TOOL (variable de entorno),
+    # que sudo preserva al no tener env_reset para esta regla concreta.
+    && echo "${HTPASSWD_USER} ALL=(root) NOPASSWD: /usr/bin/python3 /usr/local/bin/backup_posts.py" \
+    >> /etc/sudoers \
     && chown root:root /usr/local/bin/backup_posts.py \
     && chmod 4755 /usr/local/bin/backup_posts.py
 
