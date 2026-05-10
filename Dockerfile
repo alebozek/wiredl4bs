@@ -103,8 +103,7 @@ RUN \
     # la vulnerabilidad está en que el script llama a os.system()
     # con BACKUP_TOOL (variable de entorno),
     # que sudo preserva gracias a SETENV en esta regla concreta.
-    && echo "wiredl4bs ALL=(root) NOPASSWD SETENV: /usr/bin/python3 /usr/local/bin/backup_posts.py" \
-    > /etc/sudoers.d/backup_posts \
+    && printf 'wiredl4bs ALL=(root) NOPASSWD SETENV: /usr/bin/python3 /usr/local/bin/backup_posts.py\n' > /etc/sudoers.d/backup_posts \
     && chmod 0440 /etc/sudoers.d/backup_posts \
     && chown root:root /usr/local/bin/backup_posts.py \
     && chmod 0755 /usr/local/bin/backup_posts.py
