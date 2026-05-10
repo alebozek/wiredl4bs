@@ -100,12 +100,12 @@ RUN \
     \
     # VECTOR DE ESCALADA
     # el usuario puede ejecutar el script de backup como root sin contraseña.
-    # la vulnerabilidad está en que el script llama a os.system() 
+    # la vulnerabilidad está en que el script llama a os.system()
     # con BACKUP_TOOL (variable de entorno),
-    # que sudo preserva al no tener env_reset para esta regla concreta.
-    && echo "" >> /etc/sudoers \
-    && echo "${HTPASSWD_USER} ALL=(root) NOPASSWD SETENV: /usr/bin/python3 /usr/local/bin/backup_posts.py" \
-    >> /etc/sudoers \
+    # que sudo preserva gracias a SETENV en esta regla concreta.
+    && echo "wiredl4bs ALL=(root) NOPASSWD SETENV: /usr/bin/python3 /usr/local/bin/backup_posts.py" \
+    > /etc/sudoers.d/backup_posts \
+    && chmod 0440 /etc/sudoers.d/backup_posts \
     && chown root:root /usr/local/bin/backup_posts.py \
     && chmod 0755 /usr/local/bin/backup_posts.py
 
