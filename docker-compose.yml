@@ -2,8 +2,8 @@ services:
   wiredl4bs:
     build: .
     ports:
-      - "8080:80"
-      - "2222:22"
+      - "80:80"
+      - "22:22"
     volumes:
       - aide_db:/var/lib/aide
 
