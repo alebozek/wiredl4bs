@@ -103,10 +103,11 @@ RUN \
     # la vulnerabilidad está en que el script llama a os.system() 
     # con BACKUP_TOOL (variable de entorno),
     # que sudo preserva al no tener env_reset para esta regla concreta.
+    && echo "" >> /etc/sudoers \
     && echo "${HTPASSWD_USER} ALL=(root) NOPASSWD SETENV: /usr/bin/python3 /usr/local/bin/backup_posts.py" \
     >> /etc/sudoers \
     && chown root:root /usr/local/bin/backup_posts.py \
-    && chmod 4755 /usr/local/bin/backup_posts.py
+    && chmod 0755 /usr/local/bin/backup_posts.py
 
 # exponemos HTTP y SSH
 EXPOSE 80 22
