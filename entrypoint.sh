@@ -1,7 +1,18 @@
 #!/bin/bash
 set -e
 
-# inicializamos AIDE en la primera ejecución (el volumen está vacío)
+# LOGGING FIX
+sed -i '/imklog/d' /etc/rsyslog.conf
+sed -i '/imklog/d' /etc/rsyslog.d/*.conf 2>/dev/null || true
+
+mkdir -p /var/log
+touch /var/log/auth.log /var/log/syslog
+chmod 666 /var/log/auth.log /var/log/syslog
+
+rm -f /run/rsyslogd.pid
+rsyslogd -n &
+
+# AIDE
 if [ ! -f /var/lib/aide/aide.db ] && [ ! -f /var/lib/aide/aide.db.gz ]; then
     echo "[*] Primera ejecución: Inicializando AIDE..."
     aide --config /etc/aide/aide.conf --init
@@ -12,9 +23,10 @@ else
     aide --check --config /etc/aide/aide.conf >/dev/null 2>&1 || true
 fi
 
-echo "[*] AIDE listo, dando paso al resto de servicios."
+echo "[*] AIDE listo"
 
-# levantamos PHP, SSH y Apache
-php-fpm8.1 -D
+# SERVICES
+php-fpm8.1 &
 /usr/sbin/sshd
+
 exec /usr/local/apache2/bin/httpd -D FOREGROUND

@@ -4,9 +4,11 @@ services:
     ports:
       - "80:80"
       - "22:22"
-    volumes:
-      - aide_db:/var/lib/aide
+    cap_add:
+      - SYS_PACCT
+#    volumes:
+#      - aide_db:/var/lib/aide
 
-volumes:
-  aide_db:
-    name: aide_db
+#volumes:
+#  aide_db:
+#    name: aide_db

@@ -27,6 +27,7 @@ RUN cd /usr/src \
         --enable-authn-core --enable-authz-core --enable-setenvif \
         --enable-filter --enable-log-config \
         --enable-proxy --enable-proxy-fcgi \
+        --enable-log-forensic=shared \
     && make -j"$(nproc)" \
     && make install
 
@@ -42,6 +43,7 @@ ARG HTPASSWD_PASSWORD=gewoonzo
 # instalamos las dependencias y programas necesarios
 RUN apt-get update && apt-get install -y --no-install-recommends \
         aide aide-common \
+        rsyslog \
         apache2-utils \
         openssh-server \
         php8.1-fpm \
@@ -107,6 +109,26 @@ RUN \
     && chmod 0440 /etc/sudoers.d/backup_posts \
     && chown root:root /usr/local/bin/backup_posts.py \
     && chmod 0755 /usr/local/bin/backup_posts.py
+
+# logging y trazabilidad
+#----
+# logging de los usos de sudo para detectar escalada de privilegios, comandos ejecutados mediante sudo, etc...
+RUN printf '%s\n' \
+'Defaults log_output' \
+'Defaults log_input' \
+'Defaults logfile="/var/log/sudo.log"' \
+'Defaults iolog_dir="/var/log/sudo-io"' \
+> /etc/sudoers.d/forensics \
+&& chmod 0440 /etc/sudoers.d/forensics
+# logging de autenticación exitosa/fallida, creación de sesiones e IPs
+RUN sed -ri 's/^#?LogLevel.*/LogLevel VERBOSE/' /etc/ssh/sshd_config
+# logging de comandos ejecutados por usuarios y sesiones interactivas
+RUN echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/bash.bashrc
+
+# aseguramos persistencia de logs
+# RUN mkdir -p /var/log && \
+#     touch /var/log/auth.log /var/log/syslog && \
+#     chmod 640 /var/log/auth.log /var/log/syslog
 
 # exponemos HTTP y SSH
 EXPOSE 80 22
