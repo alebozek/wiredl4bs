@@ -124,11 +124,7 @@ RUN printf '%s\n' \
 RUN sed -ri 's/^#?LogLevel.*/LogLevel VERBOSE/' /etc/ssh/sshd_config
 # logging de comandos ejecutados por usuarios y sesiones interactivas
 RUN echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/bash.bashrc
-
-# aseguramos persistencia de logs
-# RUN mkdir -p /var/log && \
-#     touch /var/log/auth.log /var/log/syslog && \
-#     chmod 640 /var/log/auth.log /var/log/syslog
+RUN echo 'export PROMPT_COMMAND='\''RETRN_VAL=$?; logger -p local1.notice -t bash -i -- "$(whoami) [$$]: $(history 1)"; history -a'\''' >> /etc/bash.bashrc
 
 # exponemos HTTP y SSH
 EXPOSE 80 22
