@@ -120,9 +120,9 @@ RUN printf '%s\n' \
 'Defaults iolog_dir="/var/log/sudo-io"' \
 > /etc/sudoers.d/forensics \
 && chmod 0440 /etc/sudoers.d/forensics
-# logging de autenticación exitosa/fallida, creación de sesiones e IPs
+# logging de autenticación exitosa/fallida, creación de sesiones e IPs a /var/log/auth.log
 RUN sed -ri 's/^#?LogLevel.*/LogLevel VERBOSE/' /etc/ssh/sshd_config
-# logging de comandos ejecutados por usuarios y sesiones interactivas
+# logging de comandos ejecutados por usuarios y sesiones interactivas a /var/log/syslog
 RUN echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/bash.bashrc
 RUN echo 'export PROMPT_COMMAND='\''RETRN_VAL=$?; logger -p local1.notice -t bash -i -- "$(whoami) [$$]: $(history 1)"; history -a'\''' >> /etc/bash.bashrc
 
