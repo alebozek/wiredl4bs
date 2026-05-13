@@ -1,22 +1,20 @@
-// ── Logs de conexión Client VPN (CloudWatch) ─────────────────────────────────
-
+# logs de conexión VPN
 resource "aws_cloudwatch_log_group" "vpn_logs" {
   name              = "/wiredl4bs/vpn"
   retention_in_days = 7
 }
-
+# stream de logs a CloudWatch
 resource "aws_cloudwatch_log_stream" "vpn_stream" {
   name           = "wiredl4bs-stream"
   log_group_name = aws_cloudwatch_log_group.vpn_logs.name
 }
 
-// ── CA raíz ───────────────────────────────────────────────────────────────────
-
+# clave CA
 resource "tls_private_key" "ca_key" {
   algorithm = "RSA"
   rsa_bits  = 2048
 }
-
+# certificado autofirmado para la ca
 resource "tls_self_signed_cert" "ca_cert" {
   private_key_pem       = tls_private_key.ca_key.private_key_pem
   is_ca_certificate     = true
@@ -34,8 +32,7 @@ resource "tls_self_signed_cert" "ca_cert" {
   ]
 }
 
-// ── Certificado del servidor VPN ──────────────────────────────────────────────
-
+# certificado de la VPN
 resource "tls_private_key" "server_key" {
   algorithm = "RSA"
   rsa_bits  = 2048
@@ -51,6 +48,7 @@ resource "tls_cert_request" "server_csr" {
   dns_names = ["vpn.wiredl4bs.local"]
 }
 
+# certificado local autofirmado
 resource "tls_locally_signed_cert" "server_cert" {
   cert_request_pem      = tls_cert_request.server_csr.cert_request_pem
   ca_private_key_pem    = tls_private_key.ca_key.private_key_pem
@@ -64,8 +62,7 @@ resource "tls_locally_signed_cert" "server_cert" {
   ]
 }
 
-// ── Certificado de cliente compartido ─────────────────────────────────────────
-
+# certificado de cliente
 resource "tls_private_key" "client_key" {
   algorithm = "RSA"
   rsa_bits  = 2048
@@ -92,8 +89,7 @@ resource "tls_locally_signed_cert" "client_cert" {
   ]
 }
 
-// ── Importar certificados en ACM ──────────────────────────────────────────────
-
+# importamos los certificado en ACM
 resource "aws_acm_certificate" "server" {
   private_key       = tls_private_key.server_key.private_key_pem
   certificate_body  = tls_locally_signed_cert.server_cert.cert_pem
@@ -105,8 +101,7 @@ resource "aws_acm_certificate" "client_ca" {
   certificate_body = tls_self_signed_cert.ca_cert.cert_pem
 }
 
-// ── Endpoint de Client VPN ────────────────────────────────────────────────────
-
+# endpoint de la VPN
 resource "aws_ec2_client_vpn_endpoint" "vpn" {
   description            = "wiredl4bs-client-vpn"
   client_cidr_block      = var.vpn_client_cidr
@@ -130,15 +125,14 @@ resource "aws_ec2_client_vpn_endpoint" "vpn" {
   }
 }
 
-// ── Asociación de subred (una sola ENI de VPN: menor coste) ───────────────────
 
+# la asociamos a una subred
 resource "aws_ec2_client_vpn_network_association" "vpn_assoc_1" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
   subnet_id              = aws_subnet.private_1.id
 }
 
-// ── Regla de autorización ─────────────────────────────────────────────────────
-
+# autorizamos a las IPs seleccionadas a conectarse a la VPN
 resource "aws_ec2_client_vpn_authorization_rule" "vpn_auth" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
   target_network_cidr    = var.vpc_cidr
@@ -146,7 +140,7 @@ resource "aws_ec2_client_vpn_authorization_rule" "vpn_auth" {
   description            = "Acceso de estudiantes a la VPC del laboratorio"
 }
 
-
+# creamos un archivo de conexion
 resource "local_sensitive_file" "ovpn" {
   filename = "${path.module}/wiredl4bs.ovpn"
   content = templatefile("${path.module}/templates/client.ovpn.tpl", {
@@ -163,13 +157,13 @@ resource "local_sensitive_file" "ovpn" {
     aws_ec2_client_vpn_authorization_rule.vpn_auth,
   ]
 }
-
+# agregamos las rutas
 resource "aws_ec2_client_vpn_route" "vpn_route" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
   destination_cidr_block = var.vpc_cidr
   target_vpc_subnet_id   = aws_subnet.private_1.id
 }
-
+# agregamos otra asociacion
 resource "aws_ec2_client_vpn_network_association" "vpn_assoc_2" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
   subnet_id              = aws_subnet.private_2.id

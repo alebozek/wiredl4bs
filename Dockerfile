@@ -1,4 +1,4 @@
-# Stage 1: Compilación de Apache vulnerable (2.4.49 - CVE-2021-41773)
+# Stage 1: compilación de Apache vulnerable (2.4.49 - CVE-2021-41773)
 FROM ubuntu:22.04 AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -32,7 +32,7 @@ RUN cd /usr/src \
     && make install
 
 
-# Stage 2: Creamos la imagen final del laboratorio
+# Stage 2: creamos la imagen final del laboratorio sin dependencias extras
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive

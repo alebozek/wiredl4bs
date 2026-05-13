@@ -1,3 +1,4 @@
+# vpce para el acceso al s3
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${var.aws_region}.s3"
@@ -8,6 +9,7 @@ resource "aws_vpc_endpoint" "s3" {
   ]
 }
 
+# vpce para interactuar con cloudwatch
 resource "aws_vpc_endpoint" "cloudwatch_logs" {
   vpc_id = aws_vpc.main.id
   service_name = "com.amazonaws.${var.aws_region}.logs"
@@ -21,6 +23,7 @@ resource "aws_vpc_endpoint" "cloudwatch_logs" {
   private_dns_enabled = true
 }
 
+# vpce para interactuar con ssm y poder ejecutar comandos en la task desde la cloudshell de amazon
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.ssm"
@@ -37,7 +40,7 @@ resource "aws_vpc_endpoint" "ssm" {
   ]
 }
 
-# SSM Messages
+# mensajes ssm
 resource "aws_vpc_endpoint" "ssmmessages" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.ssmmessages"
@@ -54,7 +57,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
   ]
 }
 
-# EC2 Messages
+# mensajes ec2
 resource "aws_vpc_endpoint" "ec2messages" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.ec2messages"

@@ -1,4 +1,4 @@
-# Rol de ejecución ECS
+# rol de ejecución ECS
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecsTaskExecutionRoleWiredL4bs"
 
@@ -16,7 +16,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   })
 }
 
-# Política administrada mínima para ECS
+# política administrada mínima para ECS
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"

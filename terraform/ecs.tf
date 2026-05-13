@@ -1,4 +1,4 @@
-# Cluster ECS
+# cluster ECS
 resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-cluster"
 
@@ -18,21 +18,21 @@ resource "aws_efs_file_system" "lab" {
   }
 }
 
-# Mount target EFS en subnet AZ1
+# mount target EFS en subnet AZ1
 resource "aws_efs_mount_target" "private_1" {
   file_system_id  = aws_efs_file_system.lab.id
   subnet_id       = aws_subnet.private_1.id
   security_groups = [aws_security_group.efs_sg.id]
 }
 
-# Mount target EFS en subnet AZ2
+# mount target EFS en subnet AZ2
 resource "aws_efs_mount_target" "private_2" {
   file_system_id  = aws_efs_file_system.lab.id
   subnet_id       = aws_subnet.private_2.id
   security_groups = [aws_security_group.efs_sg.id]
 }
 
-# Definición de tarea ECS
+# definición de la tarea ECS
 resource "aws_ecs_task_definition" "lab" {
   family                   = "${var.project_name}-task"
   requires_compatibilities = ["FARGATE"]
@@ -98,7 +98,7 @@ resource "aws_ecs_task_definition" "lab" {
   ]
 }
 
-# Servicio ECS
+# servicio ECS
 resource "aws_ecs_service" "lab" {
   name            = "${var.project_name}-service"
   cluster         = aws_ecs_cluster.main.id
@@ -106,6 +106,7 @@ resource "aws_ecs_service" "lab" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
+  # importante para hacer pruebas en caso de encontrar problemas
   enable_execute_command = true
 
   network_configuration {
@@ -121,6 +122,7 @@ resource "aws_ecs_service" "lab" {
     assign_public_ip = false
   }
 
+  # entradas al load balancer para poder acceder a HTTP y SSH
   load_balancer {
     target_group_arn = aws_lb_target_group.tg_http.arn
     container_name   = "wiredl4bs"
@@ -139,7 +141,7 @@ resource "aws_ecs_service" "lab" {
   ]
 }
 
-# Grupo de logs de CloudWatch para ECS
+# grupo de logs de CloudWatch para ECS
 resource "aws_cloudwatch_log_group" "ecs_logs" {
   name              = "/ecs/${var.project_name}"
   retention_in_days = 30

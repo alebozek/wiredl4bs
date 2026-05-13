@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# LOGGING FIX
+# configuracion para rsyslogd
 sed -i '/imklog/d' /etc/rsyslog.conf
 sed -i '/imklog/d' /etc/rsyslog.d/*.conf 2>/dev/null || true
 

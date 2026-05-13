@@ -1,3 +1,4 @@
+# estos VPC endpoints se usan para conectar con el ECR y que se pueda tanto pushear como pullear la imagen
 resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.ecr.api"

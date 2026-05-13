@@ -6,9 +6,9 @@ services:
       - "22:22"
     cap_add:
       - SYS_PACCT
-#    volumes:
-#      - aide_db:/var/lib/aide
+    volumes:
+      - aide_db:/var/lib/aide
 
-#volumes:
-#  aide_db:
-#    name: aide_db
+volumes:
+  aide_db:
+    name: aide_db

@@ -1,3 +1,4 @@
+# security group del contenedor
 resource "aws_security_group" "ecs_sg" {
   name        = "ecs-private-sg"
   description = "Trafico hacia las tareas ECS"
@@ -31,13 +32,10 @@ resource "aws_security_group" "ecs_sg" {
   }
 }
 
-# ─────────────────────────────────────────────────────────────
-# Security Group del sistema de archivos EFS
-# ─────────────────────────────────────────────────────────────
-
+# security group para acceder a EFS
 resource "aws_security_group" "efs_sg" {
   name        = "efs-sg"
-  description = "Permite NFS desde las tareas ECS"
+  description = "Permite acceder al EFS desde las tasks"
   vpc_id      = aws_vpc.main.id
 
   ingress {
@@ -60,10 +58,7 @@ resource "aws_security_group" "efs_sg" {
   }
 }
 
-# ─────────────────────────────────────────────────────────────
-# Security Group de los VPC Endpoints (Interface Endpoints)
-# ─────────────────────────────────────────────────────────────
-
+# security group para los VPCE
 resource "aws_security_group" "vpce_sg" {
   name        = "${var.project_name}-vpce-sg"
   description = "Permite a las tareas ECS alcanzar los endpoints de interfaz"
