@@ -158,11 +158,11 @@ resource "local_sensitive_file" "ovpn" {
   ]
 }
 # agregamos las rutas
-resource "aws_ec2_client_vpn_route" "vpn_route" {
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
-  destination_cidr_block = var.vpc_cidr
-  target_vpc_subnet_id   = aws_subnet.private_1.id
-}
+# resource "aws_ec2_client_vpn_route" "vpn_route" {
+#   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
+#   destination_cidr_block = var.vpc_cidr
+#   target_vpc_subnet_id   = aws_subnet.private_1.id
+# }
 # agregamos otra asociacion
 resource "aws_ec2_client_vpn_network_association" "vpn_assoc_2" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
