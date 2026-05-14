@@ -126,6 +126,10 @@ RUN sed -ri 's/^#?LogLevel.*/LogLevel VERBOSE/' /etc/ssh/sshd_config
 RUN echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/bash.bashrc
 RUN echo 'export PROMPT_COMMAND='\''RETRN_VAL=$?; logger -p local1.notice -t bash -i -- "$(whoami) [$$]: $(history 1)"; history -a'\''' >> /etc/bash.bashrc
 
+# banderas o flags (indican de su progreso al estudiante/atacante)
+RUN echo 'Genial, ya solo te queda llegar a root' > /home/wiredl4bs/flag.txt
+RUN echo 'Enhorabuena, has completado este laboratorio!' > /root/flag.txt
+
 # exponemos HTTP y SSH
 EXPOSE 80 22
 ENTRYPOINT ["/entrypoint.sh"]

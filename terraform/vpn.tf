@@ -168,3 +168,13 @@ resource "aws_ec2_client_vpn_network_association" "vpn_assoc_2" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
   subnet_id              = aws_subnet.private_2.id
 }
+
+output "container-url" {
+  depends_on = [ aws_lb.internal_nlb ]
+  value = "Direccion del contenedor: ${aws_lb.internal_nlb.dns_name}"
+}
+
+output "vpn-file" {
+  depends_on = [ local_sensitive_file.ovpn ]
+  value = "Usa el archivo ${local_sensitive_file.ovpn.filename} para conectarte a la VPN y poder acceder al laboratorio"
+}
