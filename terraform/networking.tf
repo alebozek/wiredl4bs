@@ -13,7 +13,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "private_1" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.private_subnet_1
-  availability_zone       = "${var.aws_region}b"
+  availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = false
 
   tags = {
