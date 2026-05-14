@@ -1,6 +1,7 @@
 client
 dev tun
 proto udp
+cipher AES-256-GCM
 remote ${endpoint} 443
 resolv-retry infinite
 nobind

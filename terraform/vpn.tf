@@ -107,7 +107,7 @@ resource "aws_ec2_client_vpn_endpoint" "vpn" {
   client_cidr_block      = var.vpn_client_cidr
   server_certificate_arn = aws_acm_certificate.server.arn
   split_tunnel           = true
-  dns_servers            = [cidrhost(var.vpc_cidr, 2)]
+  #dns_servers            = [cidrhost(var.vpc_cidr, 2)]
 
   authentication_options {
     type                       = "certificate-authentication"
@@ -144,7 +144,11 @@ resource "aws_ec2_client_vpn_authorization_rule" "vpn_auth" {
 resource "local_sensitive_file" "ovpn" {
   filename = "${path.module}/wiredl4bs.ovpn"
   content = templatefile("${path.module}/templates/client.ovpn.tpl", {
-    endpoint    = aws_ec2_client_vpn_endpoint.vpn.dns_name
+    endpoint    = replace(
+      aws_ec2_client_vpn_endpoint.vpn.dns_name,
+      "*.",
+      ""
+    )
     ca_cert     = tls_self_signed_cert.ca_cert.cert_pem
     client_cert = tls_locally_signed_cert.client_cert.cert_pem
     client_key  = tls_private_key.client_key.private_key_pem
